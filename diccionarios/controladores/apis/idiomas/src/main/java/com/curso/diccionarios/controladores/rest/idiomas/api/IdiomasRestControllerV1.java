@@ -17,8 +17,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController // Esto es una variante de @Component
 // Pero además, Spring espera que aquí definamos endpoints HTTP
 // Y esos los da de alta en automático en un tomcat
@@ -137,7 +135,6 @@ public interface IdiomasRestControllerV1 {
     )
     @GetMapping(CUSTOM_ENDPOINT + "/{codigoIdioma}")
     ResponseEntity<IdiomaCreadoRestV1DTO> recuperarIdioma(
-
             @CodigoIdiomaValido
             @PathVariable("codigoIdioma") String codigoIdioma);
 
