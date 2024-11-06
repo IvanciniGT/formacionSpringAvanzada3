@@ -1,6 +1,8 @@
 package com.curso.diccionarios.controladores.rest.idiomas.api;
 
 import com.curso.diccionarios.AplicacionDePruebas;
+import com.curso.diccionarios.controladores.rest.idiomas.api.dtos.IdiomaRestV1DTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,10 +13,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // Spring arranca mi app de pruebas, en paralelo con estas pruebas que voy a ejecutar
@@ -29,7 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class IdiomasRestControllerV1Test {
 
-    private MockMvc clienteHttp;
+    private final MockMvc clienteHttp;
+
+    private final ObjectMapper transformadorAJSON;
 
     // Quiero tener una implementación de mentirijilla de mi controlador rest
     // Mockito genera una implementación DUMMY de mi controlador.. e inyectala en el contexto de Spring
@@ -40,8 +48,11 @@ class IdiomasRestControllerV1Test {
     private IdiomasRestControllerV1 idiomasRestControllerV1;
 
     // Para informar a JUnit que este parámetro lo debe proveer Spring
-    public IdiomasRestControllerV1Test(@Autowired MockMvc clienteHttp) {
+    @Autowired
+    public IdiomasRestControllerV1Test(MockMvc clienteHttp,
+                                       ObjectMapper transformadorAJSON) {
         this.clienteHttp = clienteHttp;
+        this.transformadorAJSON = transformadorAJSON;
     }
 
     // Qué tipo de prueba estoy definiendo?
@@ -54,12 +65,55 @@ class IdiomasRestControllerV1Test {
     // Y continuo con más pruebas.. o amplio la prueba actual
 
     @Test
-    @DisplayName("Debemos tener un endpoint llamado /api/v1/idiomas y le debemos poder hacer un GET")
+    @DisplayName("Debemos tener un endpoint llamado " +
+            IdiomasRestControllerV1.BASE_ENDPOINT +
+            IdiomasRestControllerV1.CUSTOM_ENDPOINT +
+            " y le debemos poder hacer un GET")
     void testEndpointIdiomas() throws Exception {
         // dado que tengo un cliente http y una app en un tomcat.,..
         // cuando
-        clienteHttp.perform(get("/api/v1/idiomas"))
+        clienteHttp.perform(get(IdiomasRestControllerV1.BASE_ENDPOINT + IdiomasRestControllerV1.CUSTOM_ENDPOINT))
                 // entonces
                 .andExpect(status().isOk()); // Código http 200
     }
+/*
+    @Test
+    @DisplayName("Si llamo al endPoint de recuperación de idiomas: " +
+            IdiomasRestControllerV1.BASE_ENDPOINT +
+            IdiomasRestControllerV1.CUSTOM_ENDPOINT +
+            " y hay un problema no controlado, debe devolver un código 500")
+    void testErrorEndpointIdiomas() throws Exception {
+        // dado que tengo un cliente http y una app en un tomcat.,..
+        // cuando
+        clienteHttp.perform(get(IdiomasRestControllerV1.BASE_ENDPOINT + IdiomasRestControllerV1.CUSTOM_ENDPOINT))
+                // entonces
+                .andExpect(status().isInternalServerError());
+    }*/
+    @Test
+    @DisplayName("Debo poder crear un idioma con datos guays haciendo un POST a: " +
+            IdiomasRestControllerV1.BASE_ENDPOINT +
+            IdiomasRestControllerV1.CUSTOM_ENDPOINT +
+            " y me tiene que devolver un 201 y un JSON con los datos del idioma creado")
+    void testCrearIdiomaGuay() throws Exception {
+
+        IdiomaRestV1DTO idioma = new IdiomaRestV1DTO("ES", "Español");
+        // Le digo a mockito, cuanto te llamen en el controlador ese que TU VAS A CREAR
+        // A la funcion crearIdioma, pasándote esos datos devuelve este idioma
+        //                                          VV                VV
+        when(idiomasRestControllerV1.crearIdioma(idioma)).thenReturn(idioma);
+
+        // Código: ES
+        // Nombre: Español
+        clienteHttp.perform(
+                post(IdiomasRestControllerV1.BASE_ENDPOINT + IdiomasRestControllerV1.CUSTOM_ENDPOINT)
+                .contentType("application/json")
+                .content(transformadorAJSON.writeValueAsString(idioma))
+        )
+                .andExpect(status().isCreated())
+                .andExpect(content().json(transformadorAJSON.writeValueAsString(idioma)));
+    }
+
+    // El código del pais no puede ser nulo, se admiten números? NO... Al menos cuantas letras? 2 y como mucho? 5
+    // Y si me pasan algo así? Entonces debo devolver un BAD REQUEST... y voy a devolver algo en el BODY?
+    // Lo suyo sería algo de información relativa al error: El campo código del idioma no puede ser nulo
 }
