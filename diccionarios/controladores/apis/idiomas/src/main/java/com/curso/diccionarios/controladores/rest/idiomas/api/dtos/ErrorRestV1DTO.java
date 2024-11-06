@@ -27,7 +27,7 @@ public record ErrorRestV1DTO(
                 example = "nombre"
         )
         String dato
-) implements IdiomaCreadoRestV1DTO {
+) implements IdiomaCreadoRestV1DTO, GetIdiomasRestV1DTO {
     public enum TipoError {
         ERROR_INTERNO,
         ERROR_DE_DATOS,

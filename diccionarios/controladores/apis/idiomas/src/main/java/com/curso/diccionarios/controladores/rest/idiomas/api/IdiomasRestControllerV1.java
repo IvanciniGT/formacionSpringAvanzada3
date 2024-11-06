@@ -1,12 +1,11 @@
 package com.curso.diccionarios.controladores.rest.idiomas.api;
 
-import com.curso.diccionarios.controladores.rest.idiomas.api.dtos.ErrorRestV1DTO;
-import com.curso.diccionarios.controladores.rest.idiomas.api.dtos.IdiomaCreadoRestV1DTO;
-import com.curso.diccionarios.controladores.rest.idiomas.api.dtos.IdiomaRestV1DTO;
+import com.curso.diccionarios.controladores.rest.idiomas.api.dtos.*;
 import com.curso.diccionarios.controladores.rest.idiomas.api.validations.CodigoIdiomaValido;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -17,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController // Esto es una variante de @Component
 // Pero además, Spring espera que aquí definamos endpoints HTTP
@@ -52,15 +53,23 @@ public interface IdiomasRestControllerV1 {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Lista de idiomas devuelta correctamente"
+                            description = "Lista de idiomas devuelta correctamente",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = IdiomasRestV1DTO.class)
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "500",
-                            description = "Error interno del servidor"
+                            description = "Error interno del servidor",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorRestV1DTO.class)
+                            )
                     )
             }
     )
-    void obtenerIdiomas();
+    GetIdiomasRestV1DTO obtenerIdiomas();
 
     @PostMapping(CUSTOM_ENDPOINT)
     @Operation(
@@ -101,7 +110,7 @@ public interface IdiomasRestControllerV1 {
                             description = "Idioma devuelto correctamente",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = IdiomaCreadoRestV1DTO.class)
+                                    schema = @Schema(implementation = IdiomaRestV1DTO.class)
                             )
                     ),
                     @ApiResponse(
@@ -115,6 +124,7 @@ public interface IdiomasRestControllerV1 {
             }
     )
     @Parameter(
+            in = ParameterIn.PATH,
             name = "codigoIdioma",
             description = "Código del idioma a recuperar",
             required = true,
@@ -126,7 +136,9 @@ public interface IdiomasRestControllerV1 {
             )
     )
     @GetMapping(CUSTOM_ENDPOINT + "/{codigoIdioma}")
-    ResponseEntity<IdiomaCreadoRestV1DTO> recuperarIdioma(@CodigoIdiomaValido
-                                                          @PathVariable("codigoIdioma") String codigoIdioma);
+    ResponseEntity<IdiomaCreadoRestV1DTO> recuperarIdioma(
+
+            @CodigoIdiomaValido
+            @PathVariable("codigoIdioma") String codigoIdioma);
 
 }
