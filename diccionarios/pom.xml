@@ -57,7 +57,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <!--lombok: para tener anotaciones guays! -->
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

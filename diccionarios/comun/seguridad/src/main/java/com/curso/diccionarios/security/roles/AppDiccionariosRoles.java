@@ -1,3 +1,5 @@
+package com.curso.diccionarios.security.roles;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
