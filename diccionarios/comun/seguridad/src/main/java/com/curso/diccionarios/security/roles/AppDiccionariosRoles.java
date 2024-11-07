@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum AppDiccionariosRoles {
-    ROLE_ADMIN("Admin"),
-    ROLE_EDITOR("Editor");
+    ROLE_ADMIN(AppDiccionariosRoles.ROLE_ADMIN_NAME),
+    ROLE_EDITOR(AppDiccionariosRoles.ROLE_EDITOR_NAME);
 
     @Getter
     private final String nombre;
@@ -15,4 +15,12 @@ public enum AppDiccionariosRoles {
     public String toString(){
         return getNombre();
     }
+
+    public static String getNombre(AppDiccionariosRoles role){
+        return role.getNombre();
+    }
+
+    public static final String ROLE_ADMIN_NAME = "Admin";
+    public static final String ROLE_EDITOR_NAME = "Editor";
+
 }

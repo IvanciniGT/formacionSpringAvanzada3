@@ -2,10 +2,12 @@ package com.curso.diccionarios.controladores.rest.idiomas.api;
 
 import com.curso.diccionarios.controladores.rest.idiomas.api.dtos.*;
 import com.curso.diccionarios.controladores.rest.idiomas.api.validations.CodigoIdiomaValido;
+import com.curso.diccionarios.security.roles.AppDiccionariosRoles;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -13,8 +15,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // Esto es una variante de @Component
@@ -22,6 +26,12 @@ import org.springframework.web.bind.annotation.*;
 // Y esos los da de alta en automático en un tomcat
 // Los endpoints de este controlador todos llevan el prefijo /api
 @RequestMapping(IdiomasRestControllerV1.BASE_ENDPOINT)
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
 @OpenAPIDefinition(
         info = @Info (
                 title = "API REST de Idiomas para la app de diccionarios",
@@ -91,10 +101,19 @@ public interface IdiomasRestControllerV1 {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorRestV1DTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Si el usuario no está autenticado y no tiene el role " + AppDiccionariosRoles.ROLE_EDITOR_NAME
                     )
             }
     )
     //@ResponseStatus(HttpStatus.CREATED) // Si quitamos el ResponseEntity
+    @PreAuthorize("hasRole('"+ AppDiccionariosRoles.ROLE_EDITOR_NAME +"')") // Vamos a escribir código SPEL: Spring Expression Language
+            // Quiero comprobar previo a que se autorice la llamada a esta función
+            // Que en el contexto de seguridad de la petición HTTP el usuario que esté declarado
+            // tenga el role de EDITOR
+                      // permitAll()    hasRole('')
     ResponseEntity<IdiomaCreadoRestV1DTO> crearIdioma(@Valid @RequestBody IdiomaRestV1DTO datosIdioma);
 
     @Operation(

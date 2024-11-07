@@ -10,6 +10,9 @@
     </parent>
     <artifactId>diccionarios-controladores</artifactId>
     <name>Controladores de la app diccionarios</name>
+    <properties>
+        <cucumber-java.version>7.20.1</cucumber-java.version>
+    </properties>
 
     <packaging>pom</packaging>
 
@@ -28,6 +31,23 @@
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.curso</groupId>
+            <artifactId>diccionarios-seguridad</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Cucumber, para pòder ejecutar ficheros gherkin -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber-java.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

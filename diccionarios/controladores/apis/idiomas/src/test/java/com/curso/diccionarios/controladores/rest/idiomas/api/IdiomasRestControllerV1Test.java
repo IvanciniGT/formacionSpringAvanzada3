@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-
+import com.curso.diccionarios.security.roles.AppDiccionariosRoles;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -103,10 +105,31 @@ class IdiomasRestControllerV1Test {
                 .andExpect(status().isInternalServerError());
     }*/
     @Test
-    @DisplayName("Debo poder crear un idioma con datos guays haciendo un POST a: " +
+    @DisplayName("No debo poder crear un idioma con datos guays sin esta autenticado haciendo un POST a: " +
+            IdiomasRestControllerV1.BASE_ENDPOINT +
+            IdiomasRestControllerV1.CUSTOM_ENDPOINT +
+            " y me tiene que devolver un 403 y un JSON con los datos del idioma creado")
+    @WithAnonymousUser
+    void testCrearIdiomaGuaySinRoleEditor() throws Exception {
+
+        IdiomaRestV1DTO idioma = new IdiomaRestV1DTO("ES", "Español");
+        // Le digo a mockito, cuanto te llamen en el controlador ese que TU VAS A CREAR
+        // A la funcion crearIdioma, pasándote esos datos devuelve este idioma
+        //                                          VV                VV
+        clienteHttp.perform(
+                        post(IdiomasRestControllerV1.BASE_ENDPOINT + IdiomasRestControllerV1.CUSTOM_ENDPOINT)
+                                .contentType("application/json")
+                                .content(transformadorAJSON.writeValueAsString(idioma))
+                )
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Debo poder crear un idioma con datos guays si soy un usuario con role "+AppDiccionariosRoles.ROLE_EDITOR_NAME+" haciendo un POST a: " +
             IdiomasRestControllerV1.BASE_ENDPOINT +
             IdiomasRestControllerV1.CUSTOM_ENDPOINT +
             " y me tiene que devolver un 201 y un JSON con los datos del idioma creado")
+    @WithMockUser( username = "pepe", roles = {AppDiccionariosRoles.ROLE_EDITOR_NAME})
     void testCrearIdiomaGuay() throws Exception {
 
         IdiomaRestV1DTO idioma = new IdiomaRestV1DTO("ES", "Español");
@@ -118,14 +141,13 @@ class IdiomasRestControllerV1Test {
         // Código: ES
         // Nombre: Español
         clienteHttp.perform(
-                post(IdiomasRestControllerV1.BASE_ENDPOINT + IdiomasRestControllerV1.CUSTOM_ENDPOINT)
-                .contentType("application/json")
-                .content(transformadorAJSON.writeValueAsString(idioma))
-        )
+                        post(IdiomasRestControllerV1.BASE_ENDPOINT + IdiomasRestControllerV1.CUSTOM_ENDPOINT)
+                                .contentType("application/json")
+                                .content(transformadorAJSON.writeValueAsString(idioma))
+                )
                 .andExpect(status().isCreated())
                 .andExpect(content().json(transformadorAJSON.writeValueAsString(idioma)));
     }
-
     // El código del pais no puede ser nulo, se admiten números? NO... Al menos cuantas letras? 2 y como mucho? 5
     // Y si me pasan algo así? Entonces debo devolver un BAD REQUEST... y voy a devolver algo en el BODY?
     // Lo suyo sería algo de información relativa al error: El campo código del idioma no puede ser nulo
@@ -136,7 +158,6 @@ class IdiomasRestControllerV1Test {
         IdiomaRestV1DTO idioma = new IdiomaRestV1DTO("E", "Español");
         validarErrorRespuestaCreacion(idioma, valorADevolver);
     }
-
     // El código del pais no puede ser nulo, se admiten números? NO... Al menos cuantas letras? 2 y como mucho? 5
     // Y si me pasan algo así? Entonces debo devolver un BAD REQUEST... y voy a devolver algo en el BODY?
     // Lo suyo sería algo de información relativa al error: El campo código del idioma no puede ser nulo
