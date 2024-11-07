@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 // Si la anotación debe mantenerse en tiempo de ejecución
 @Retention(RetentionPolicy.RUNTIME)
-// Aquí decimos que esta anmotación es una validación
+// Aquí decimos que esta anotación es una validación
 @Constraint(validatedBy = {}) // Si quisiera que mi validación se hiciese mediante una función java
                               // me crearía una clase que implementase la interfaz ConstraintValidator
                               // Y ahi dentro definiría la lógica de validación
