@@ -5,29 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.curso</groupId>
-        <artifactId>diccionarios</artifactId>
+        <artifactId>diccionarios-common</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>diccionarios-controladores</artifactId>
-    <name>Controladores de la app diccionarios</name>
 
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>apis</module>
-    </modules>
+    <artifactId>diccionarios-app-prueba-securizada</artifactId>
+    <name>Aplicación securizada para entornos de prueba</name>
 
     <dependencies>
+        <dependency>
+            <groupId>com.curso</groupId>
+            <artifactId>diccionarios-seguridad</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.curso</groupId>
-            <artifactId>diccionarios-app-prueba-securizada</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-
 </project>

@@ -12,49 +12,4 @@
     <artifactId>diccionarios-controlador-idiomas-api</artifactId>
     <name>API del controlador de idiomas de la app diccionarios</name>
 
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <jvmArguments>
-                        -Dspring.application.admin.enabled=true
-                        -Dspring.profiles.active=test-api
-                    </jvmArguments>
-                    <mainClass>com.curso.diccionarios.AplicacionDePruebas</mainClass>
-                    <additionalClasspathElements>
-                        <additionalClasspathElement>${project.build.directory}/test-classes</additionalClasspathElement>
-                    </additionalClasspathElements>
-                    <useTestClasspath>true</useTestClasspath>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>start</goal>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-maven-plugin</artifactId>
-                <version>${springdoc-openapi-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-docs</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputFileName>openapi.json</outputFileName>
-                    <outputDir>${project.build.directory}/openapi</outputDir>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
