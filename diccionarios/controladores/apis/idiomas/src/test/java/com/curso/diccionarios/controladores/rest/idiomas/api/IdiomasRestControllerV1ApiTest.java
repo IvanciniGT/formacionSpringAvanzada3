@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 // Le pido a Spring que cuando arranque la app de pruebas, la arranque con un perfil concreto: test-api
 @ActiveProfiles("test-api")
-class IdiomasRestControllerV1Test {
+class IdiomasRestControllerV1ApiTest {
 
     private final MockMvc clienteHttp;
 
@@ -62,9 +62,9 @@ class IdiomasRestControllerV1Test {
 
     // Para informar a JUnit que este parámetro lo debe proveer Spring
     @Autowired
-    public IdiomasRestControllerV1Test(MockMvc clienteHttp,
-                                       ObjectMapper transformadorAJSON,
-                                       IdiomasRestControllerV1 idiomasRestControllerV1) {
+    public IdiomasRestControllerV1ApiTest(MockMvc clienteHttp,
+                                          ObjectMapper transformadorAJSON,
+                                          IdiomasRestControllerV1 idiomasRestControllerV1) {
         this.clienteHttp = clienteHttp;
         this.transformadorAJSON = transformadorAJSON;
         this.idiomasRestControllerV1 = idiomasRestControllerV1;
