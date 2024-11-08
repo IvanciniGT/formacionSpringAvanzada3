@@ -1,4 +1,5 @@
 package com.curso.diccionarios.controladores.services.idiomas;
 
-public class IdiomasService {
+public interface IdiomasService {
+    Object recuperarIdiomaPorCodigo(String codigoIdioma) ;
 }
