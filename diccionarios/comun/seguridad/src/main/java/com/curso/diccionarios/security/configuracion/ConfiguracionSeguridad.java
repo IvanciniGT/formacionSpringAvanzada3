@@ -2,6 +2,7 @@ package com.curso.diccionarios.security.configuracion;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -58,6 +59,7 @@ public class ConfiguracionSeguridad {
     }
 
     @Bean
+    @Primary
     public CorsConfigurationSource miFuncionQueConfiguraLaPoliticaDeCors(){
         // Una cosa es lo que voy a definir AQUI, que aplicará a la app en entorno de prod...
         // Pero este objeto (BEAN) lo querré sobreescribir para pruebas. En test, vamos a permitir que a mi servidor le ataquen desde cualquier sitio.
