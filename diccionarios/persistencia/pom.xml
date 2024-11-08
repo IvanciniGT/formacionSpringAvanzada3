@@ -17,11 +17,4 @@
         <module>diccionarios-editables-persistencia-jpa</module>
     </modules>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-    </dependencies>
 </project>

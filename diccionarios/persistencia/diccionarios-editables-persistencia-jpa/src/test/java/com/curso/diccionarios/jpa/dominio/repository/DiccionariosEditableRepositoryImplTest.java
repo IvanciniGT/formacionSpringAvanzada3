@@ -42,7 +42,7 @@ class DiccionariosEditableRepositoryImplTest {
         // Dado: Simulamos una entidad existente en la base de datos
         String nombre = "Oxford";
         IdiomaEntity idiomaEntity = new IdiomaEntity();
-        idiomaEntity.setIdioma("Inglés");
+        idiomaEntity.setCodigo("Inglés");
 
         DiccionarioEntity diccionarioEntity = new DiccionarioEntity();
         diccionarioEntity.setNombre(nombre);
@@ -50,7 +50,7 @@ class DiccionariosEditableRepositoryImplTest {
 
         Diccionario diccionario = Diccionario.builder()
                 .nombre(nombre)
-                .idioma(Idioma.builder().idioma("Inglés").build())
+                .idioma(Idioma.builder().codigo("Inglés").build())
                 .build();
 
         // Configuramos el mock para que devuelva la entidad simulada
@@ -58,12 +58,12 @@ class DiccionariosEditableRepositoryImplTest {
         when(diccionarioMapper.entityToModel(diccionarioEntity)).thenReturn(diccionario);
 
         // Cuando: Se invoca el método para obtener el diccionario
-        Optional<Diccionario> resultado = diccionariosEditableRepository.getDiccionario(Idioma.builder().idioma("Inglés").build(), nombre);
+        Optional<Diccionario> resultado = diccionariosEditableRepository.getDiccionario(Idioma.builder().codigo("Inglés").build(), nombre);
 
         // Entonces: Se verifica que el diccionario es retornado y tiene el idioma correcto
         assertTrue(resultado.isPresent());
         assertEquals("Oxford", resultado.get().getNombre());
-        assertEquals("Inglés", resultado.get().getIdioma().getIdioma());
+        assertEquals("Inglés", resultado.get().getIdioma().getCodigo());
         verify(diccionarioJpaRepository, times(1)).findByNombre(nombre);
         verify(diccionarioMapper, times(1)).entityToModel(diccionarioEntity);
     }
@@ -76,7 +76,7 @@ class DiccionariosEditableRepositoryImplTest {
         when(diccionarioJpaRepository.findByNombre(nombre)).thenReturn(Optional.empty());
 
         // Cuando: Se invoca el método para obtener el diccionario
-        Optional<Diccionario> resultado = diccionariosEditableRepository.getDiccionario(Idioma.builder().idioma("Inglés").build(), nombre);
+        Optional<Diccionario> resultado = diccionariosEditableRepository.getDiccionario(Idioma.builder().codigo("Inglés").build(), nombre);
 
         // Entonces: Se verifica que el resultado está vacío
         assertFalse(resultado.isPresent());
@@ -89,9 +89,9 @@ class DiccionariosEditableRepositoryImplTest {
     void testNewDiccionario() throws AlreadyExistsEntityException, InvalidArgumentException {
         // Dado: Configuramos los mocks para simular la creación de un nuevo diccionario
         String nombre = "Oxford";
-        Idioma idioma = Idioma.builder().idioma("Inglés").build();
+        Idioma idioma = Idioma.builder().codigo("Inglés").build();
         IdiomaEntity idiomaEntity = new IdiomaEntity();
-        idiomaEntity.setIdioma("Inglés");
+        idiomaEntity.setCodigo("Inglés");
 
         DiccionarioEntity diccionarioEntity = new DiccionarioEntity();
         diccionarioEntity.setNombre(nombre);
@@ -125,7 +125,7 @@ class DiccionariosEditableRepositoryImplTest {
     void testGetDiccionariosByIdioma() {
         // Dado: Simulamos varios diccionarios existentes en la base de datos
         IdiomaEntity idiomaEntity = new IdiomaEntity();
-        idiomaEntity.setIdioma("Inglés");
+        idiomaEntity.setCodigo("Inglés");
 
         DiccionarioEntity diccionarioEntity1 = new DiccionarioEntity();
         diccionarioEntity1.setNombre("Oxford");
@@ -137,12 +137,12 @@ class DiccionariosEditableRepositoryImplTest {
 
         Diccionario diccionario1 = Diccionario.builder()
                 .nombre("Oxford")
-                .idioma(Idioma.builder().idioma("Inglés").build())
+                .idioma(Idioma.builder().codigo("Inglés").build())
                 .build();
 
         Diccionario diccionario2 = Diccionario.builder()
                 .nombre("Cambridge")
-                .idioma(Idioma.builder().idioma("Inglés").build())
+                .idioma(Idioma.builder().codigo("Inglés").build())
                 .build();
 
         // Configuramos el mock para devolver las entidades simuladas
@@ -151,7 +151,7 @@ class DiccionariosEditableRepositoryImplTest {
         when(diccionarioMapper.entityToModel(diccionarioEntity2)).thenReturn(diccionario2);
 
         // Cuando: Se invoca el método para obtener todos los diccionarios de un idioma
-        List<Diccionario> resultado = diccionariosEditableRepository.getDiccionario(Idioma.builder().idioma("Inglés").build());
+        List<Diccionario> resultado = diccionariosEditableRepository.getDiccionario(Idioma.builder().codigo("Inglés").build());
 
         // Entonces: Se verifica que se retornan los diccionarios correctos
         assertEquals(2, resultado.size());

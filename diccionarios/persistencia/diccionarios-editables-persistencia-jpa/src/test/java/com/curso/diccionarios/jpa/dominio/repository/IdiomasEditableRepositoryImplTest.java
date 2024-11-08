@@ -34,16 +34,16 @@ class IdiomasEditableRepositoryImplTest {
         // Dado: Simulamos una entidad existente en la base de datos
         String idioma = "Español";
         IdiomaEntity idiomaEntity = new IdiomaEntity();
-        idiomaEntity.setIdioma(idioma);
-        idiomaEntity.setIcono("🇪🇸");
+        idiomaEntity.setCodigo(idioma);
+        idiomaEntity.setNombre("🇪🇸");
 
         IdiomaEditable idiomaEditable = IdiomaEditable.builder()
-                .idioma(idioma)
-                .icono("🇪🇸")
+                .codigo(idioma)
+                .nombre("🇪🇸")
                 .build();
 
         // Configuramos el mock para que devuelva la entidad simulada
-        when(idiomaJpaRepository.findByIdioma(idioma)).thenReturn(Optional.of(idiomaEntity));
+        when(idiomaJpaRepository.findByCodigo(idioma)).thenReturn(Optional.of(idiomaEntity));
         when(idiomaMapper.entityToModel(idiomaEntity)).thenReturn(idiomaEditable);
 
         // Cuando: Se invoca el método para obtener el idioma
@@ -51,9 +51,9 @@ class IdiomasEditableRepositoryImplTest {
 
         // Entonces: Se verifica que el idioma es retornado y tiene el icono correcto
         assertTrue(resultado.isPresent());
-        assertEquals("Español", resultado.get().getIdioma());
-        assertEquals("🇪🇸", resultado.get().getIcono());
-        verify(idiomaJpaRepository, times(1)).findByIdioma(idioma);
+        assertEquals("Español", resultado.get().getCodigo());
+        assertEquals("🇪🇸", resultado.get().getNombre());
+        verify(idiomaJpaRepository, times(1)).findByCodigo(idioma);
         verify(idiomaMapper, times(1)).entityToModel(idiomaEntity);
     }
     @Test
@@ -62,16 +62,16 @@ class IdiomasEditableRepositoryImplTest {
         String idioma = "Francés";
 
         IdiomaEntity idiomaEntity = new IdiomaEntity();
-        idiomaEntity.setIdioma(idioma);
-        idiomaEntity.setIcono("🇫🇷");
+        idiomaEntity.setCodigo(idioma);
+        idiomaEntity.setNombre("🇫🇷");
 
         IdiomaEditable idiomaEditable = IdiomaEditable.builder()
-                .idioma(idioma)
-                .icono("🇫🇷")
+                .codigo(idioma)
+                .nombre("🇫🇷")
                 .build();
 
         // Configuramos el mock para devolver la entidad existente
-        when(idiomaJpaRepository.findByIdioma(idioma)).thenReturn(Optional.of(idiomaEntity));
+        when(idiomaJpaRepository.findByCodigo(idioma)).thenReturn(Optional.of(idiomaEntity));
         when(idiomaMapper.entityToModel(idiomaEntity)).thenReturn(idiomaEditable);
 
         // Cuando: Se invoca el mét odo para eliminar el idioma
@@ -80,7 +80,7 @@ class IdiomasEditableRepositoryImplTest {
         // Entonces: Se verifica que el idioma fue eliminado
         assertTrue(resultado.isPresent());
         verify(idiomaJpaRepository, times(1)).delete(idiomaEntity);
-        verify(idiomaJpaRepository, times(1)).findByIdioma(idioma);
+        verify(idiomaJpaRepository, times(1)).findByCodigo(idioma);
         verify(idiomaMapper, times(1)).entityToModel(idiomaEntity);
     }
 

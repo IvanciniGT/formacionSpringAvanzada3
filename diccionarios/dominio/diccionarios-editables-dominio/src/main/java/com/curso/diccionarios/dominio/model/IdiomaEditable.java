@@ -9,9 +9,9 @@ import java.util.List;
 @Builder
 public class IdiomaEditable {
 
-    private String idioma;
+    private String codigo;
     @Setter
-    private String icono;
+    private String nombre;
     private List<Diccionario> diccionarios;
 
 }

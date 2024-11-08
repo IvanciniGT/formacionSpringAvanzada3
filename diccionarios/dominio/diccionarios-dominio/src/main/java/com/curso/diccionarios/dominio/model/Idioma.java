@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 public class Idioma {
 
-    String idioma;
-    String icono;
+    String codigo;
+    String nombre;
     List<Diccionario> diccionarios;
 
 }

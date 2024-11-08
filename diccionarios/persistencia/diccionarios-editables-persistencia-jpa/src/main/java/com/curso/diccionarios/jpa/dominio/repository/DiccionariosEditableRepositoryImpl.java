@@ -25,14 +25,14 @@ public class DiccionariosEditableRepositoryImpl implements DiccionariosEditableR
     @Override
     public Optional<Diccionario> getDiccionario(@NonNull Idioma idioma, @NonNull String nombre) {
         return diccionarioJpaRepository.findByNombre(nombre)
-                .filter(diccionario -> diccionario.getIdioma().getIdioma().equals(idioma.getIdioma()))
+                .filter(diccionario -> diccionario.getIdioma().getCodigo().equals(idioma.getCodigo()))
                 .map(diccionarioMapper::entityToModel);
     }
 
     @Override
     public List<Diccionario> getDiccionario(@NonNull Idioma idioma) {
         return diccionarioJpaRepository.findAll().stream()
-                .filter(diccionario -> diccionario.getIdioma().getIdioma().equals(idioma.getIdioma()))
+                .filter(diccionario -> diccionario.getIdioma().getCodigo().equals(idioma.getCodigo()))
                 .map(diccionarioMapper::entityToModel)
                 .toList();
     }

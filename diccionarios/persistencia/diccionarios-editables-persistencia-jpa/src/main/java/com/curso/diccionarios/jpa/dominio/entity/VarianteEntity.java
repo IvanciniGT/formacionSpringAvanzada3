@@ -16,7 +16,7 @@ public class VarianteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 25, unique = true)
+    @Column(nullable = false, length = 25)
     private String variante;
 
     @ManyToOne

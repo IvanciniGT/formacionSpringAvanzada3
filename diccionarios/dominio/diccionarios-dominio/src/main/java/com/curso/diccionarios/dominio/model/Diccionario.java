@@ -13,5 +13,4 @@ public class Diccionario {
     String nombre;
     Idioma idioma;
     List<Palabra> palabras;
-
 }

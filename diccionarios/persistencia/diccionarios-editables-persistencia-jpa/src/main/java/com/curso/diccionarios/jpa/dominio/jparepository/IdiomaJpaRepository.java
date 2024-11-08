@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface IdiomaJpaRepository extends JpaRepository<IdiomaEntity, Integer> {
 
     // Mét odo para buscar un idioma por su nombre
-    Optional<IdiomaEntity> findByIdioma(String idioma);
+    Optional<IdiomaEntity> findByCodigo(String idioma);
 
 }

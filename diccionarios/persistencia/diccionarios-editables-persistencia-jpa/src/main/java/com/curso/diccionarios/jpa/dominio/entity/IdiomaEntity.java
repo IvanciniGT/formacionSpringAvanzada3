@@ -18,10 +18,10 @@ public class IdiomaEntity  {
     private Integer id;
 
     @Column(nullable = false, length = 10, unique = true)
-    private String idioma;
+    private String codigo;
 
     @Column(nullable = false, length = 100)
-    private String icono;
+    private String nombre;
 
     @OneToMany(mappedBy = "idioma")
     private List<DiccionarioEntity> diccionarios;

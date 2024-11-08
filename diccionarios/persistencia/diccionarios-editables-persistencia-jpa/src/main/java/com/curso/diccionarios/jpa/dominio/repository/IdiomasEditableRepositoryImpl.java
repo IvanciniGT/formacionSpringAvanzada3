@@ -24,7 +24,7 @@ public class IdiomasEditableRepositoryImpl implements IdiomasEditableRepository 
 
     @Override
     public Optional<IdiomaEditable> getIdioma(@NonNull String idioma) {
-        return idiomaJpaRepository.findByIdioma(idioma)
+        return idiomaJpaRepository.findByCodigo(idioma)
                 .map(idiomaMapper::entityToModel);
     }
 
@@ -37,34 +37,34 @@ public class IdiomasEditableRepositoryImpl implements IdiomasEditableRepository 
 
     @Override
     public void updateIdioma(@NonNull IdiomaEditable idiomaEditable) throws InvalidArgumentException, NonExistentEntityException {
-        Optional<IdiomaEntity> existingIdioma = idiomaJpaRepository.findByIdioma(idiomaEditable.getIdioma());
+        Optional<IdiomaEntity> existingIdioma = idiomaJpaRepository.findByCodigo(idiomaEditable.getCodigo());
 
         if (existingIdioma.isEmpty()) {
             throw new NonExistentEntityException("El idioma no existe");
         }
 
         existingIdioma.ifPresent(entity -> {
-            entity.setIcono(idiomaEditable.getIcono());
+            entity.setNombre(idiomaEditable.getNombre());
             idiomaJpaRepository.save(entity); // Guardamos los cambios en la base de datos
         });
     }
 
     @Override
     public IdiomaEditable newIdioma(@NonNull String idioma) throws InvalidArgumentException, AlreadyExistsEntityException {
-        if (idiomaJpaRepository.findByIdioma(idioma).isPresent()) {
+        if (idiomaJpaRepository.findByCodigo(idioma).isPresent()) {
             throw new AlreadyExistsEntityException("El idioma ya existe");
         }
 
         IdiomaEntity newIdioma = new IdiomaEntity();
-        newIdioma.setIdioma(idioma);
-        newIdioma.setIcono("default_icono"); // Icono por defecto
+        newIdioma.setCodigo(idioma);
+        newIdioma.setNombre("default_icono"); // Icono por defecto
 
         return idiomaMapper.entityToModel(idiomaJpaRepository.save(newIdioma));
     }
 
     @Override
     public Optional<IdiomaEditable> deleteIdioma(@NonNull String idioma) {
-        Optional<IdiomaEntity> existingIdioma = idiomaJpaRepository.findByIdioma(idioma);
+        Optional<IdiomaEntity> existingIdioma = idiomaJpaRepository.findByCodigo(idioma);
 
         existingIdioma.ifPresent(idiomaJpaRepository::delete); // Eliminamos por nombre
 
