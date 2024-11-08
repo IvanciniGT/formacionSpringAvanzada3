@@ -18,6 +18,8 @@
     <modules>
         <module>controladores</module>
         <module>comun</module>
+        <module>dominio</module>
+        <module>persistencia</module>
     </modules>
 
     <properties>
